@@ -1,0 +1,34 @@
+<mat-form-field class="demo-chip-list" appearance="outline">
+    <mat-chip-list #chipList>
+      <mat-chip
+        *ngFor="let client of selectedClient"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(client)"
+        >
+        {{client}}
+        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="Type to Search Employee"
+        #clientInput
+        [formControl]="clientCntrl"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (keyup)="getAllClients(clientInput.value)"
+        (blur)="selectionChanges()"/>
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-chip-list>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngIf="isLoading" class="is-loading">
+          <fsh-spinner></fsh-spinner>
+      </mat-option>
+      <ng-container *ngIf="!isLoading">
+      <mat-option *ngFor="let client of clientList" [value]="client.id">
+      <span> {{ client.clientDetails.name }} #{{client.id}}</span>
+      </mat-option>
+    </ng-container>
+    </mat-autocomplete>
+  </mat-form-field>
